@@ -125,4 +125,55 @@
     delete from timi_adc;     //删除timi_adc表中的所有数据
 ```
 
-    
+· `LIKE查询 语法`:      
+```
+    SELECT * FROM table_name WHERE condition LIKE condition;
+```
+1. `%` 百分号符号        
+```
+    //% 在SQL LIKE子句中，用%字符表示任意字符，如果没有使用任何%，LIKE相当与"="
+    //搜索timi_adc表中名字带孙的射手
+        SELECT  *
+        FROM    timi_adc
+        WHERE   hero_name LIKE '%孙%';
+    //'%孙%'==>字符串含孙;'孙%'==>字符串首字符为孙;'%孙'==>字符串以孙结尾
+```
+2. `_` 下划线符号       
+```
+    SELECT  *
+    FROM  timi_adc
+    WHERE  hero_name LIKE '_尚香';
+// _尚香和%尚香区别:假如有一个人叫  公孙尚香 ，前者查询不到，后者可以
+```
+
+· `AND&OR 语法`: AND求交，OR求并            
+```
+    SELECT * FROM table_name WHERE conditionA AND/OR condtionB;
+//查询timi_adc表中胜率为 50%~51% 或者胜率低于 47% 的英雄
+    SELECT  *
+    FROM   timi_adc
+    WHERE  
+        win_rate > 0.5
+        AND win_rate < 0.51
+        OR win_rate < 0.47;
+//有时候需要加上 () 括号来分割条件，如下可以查询到5条数据
+    SELECT  *
+    FROM  timi_adc
+    WHERE  
+     (
+        win_rate > 0.5
+        OR win_rate < 0.47
+      )
+      AND win_rate < 0.51;
+//如下这样写，可以查到9条数据
+    SELECT  *
+    FROM  timi_adc
+    WHERE
+      win_rate > 0.5
+      OR (
+        win_rate < 0.47
+        AND win_rate < 0.51
+      );
+```
+
+· 
