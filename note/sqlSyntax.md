@@ -176,4 +176,48 @@
       );
 ```
 
-· 
+· `IN/NOT IN/NOT LIKE 语法`:         
+```
+    SELECT * FROM table_name WHERE column IN (condtionA,condtionB);
+//查询timi_adc表中热度为T0和T3的英雄
+    SELECT  *
+    FROM  timi_adc
+    WHERE  fever IN ('T0', 'T3');
+//等价于
+    SELECT  *
+    FROM  timi_adc
+    WHERE
+      fever = 'T0'
+      OR fever = 'T3';
+
+//NOT IN/NOT LIKE （NOT相当于否定条件）
+//查询timi_adc表中热度T0以外的英雄
+    SELECT  *
+    FROM  timi_adc
+    WHERE  fever NOT IN ('T0');
+//查询所有名字里不带孙的英雄
+    SELECT  *
+    FROM  timi_adc
+    WHERE  hero_name NOT LIKE '%孙%';
+```
+· `NULL值的处理`:空置不占用存储空间  NULL占用存储空间           
+1. IS NULL:当列的值是NULL时，这个运算符返回true     
+2. IS NOT NULL:当列的值是NULL时，这个运算符返回false        
+3. <=>:比较操作符，当比较的两个值都为NULL时或者相等时，返回true     
+· `NULL语法`:       
+![student表](https://github.com/NicknamePetName/Photo/blob/main/MySQL/studentTable.png?raw=true) 
+```
+//不可以使用=NULL  !=NULL来查找NULL值， NULL = NULL 会返回 NULL
+
+    SELECT field_name1,field_name2
+    FROM table_name
+    WHERE field_name2 IS NOT NULL/IS NULL;
+//查询student表id,mobile,其中mobile不为NULL的数据
+    SELECT  id,mobile
+    FROM  student
+    WHERE  mobile IS NOT NULL;//查询到id为2,4,6,7,9符合mobile不为NULL
+//查询student表id,name,grade,并且grade为NULL的数据
+    SELECT  id,name,grade
+    FROM  student
+    WHERE  grade IS NULL;//查询得到id为5，6，9符合
+```
