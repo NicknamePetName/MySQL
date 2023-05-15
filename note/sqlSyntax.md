@@ -221,3 +221,92 @@
     FROM  student
     WHERE  grade IS NULL;//查询得到id为5，6，9符合
 ```
+
+· ` CONCAT函数 语法`:           
+```
+//CONCAT是一个查询语句，最基本结构式SELECT列名FROM表名
+//CONCAT函数可以拼接列名，也可以拼接字符串
+//注:如果拼接的值中有NULL，则结果一律为NULL
+//在使用CONCAT函数的时候可以同时查询其他的列
+//CONCAT函数的参数之间用英文 (,) 逗号分隔
+    SELECT column_name1,CONCAT(column_name2,str,column_name3),column_name4 FROM table_name;
+
+//查询timi_adc表中英雄的id,以及名字+胜率
+    SELECT  
+        id,concat(hero_name, '的胜率是', win_rate)
+    FROM
+        timi_adc;//输出的数据是  concat(hero_name, '的胜率是', win_rate)
+                                后羿的胜率是0.4995 
+                                ……………………
+```     
+1. 配合WHERE语句查询:   
+```
+//查询id = 3的数据
+    SELECT  concat(hero_name, '的胜率是', win_rate)
+    FROM  timi_adc
+    WHERE  id = 3;
+```
+2. AS 别名:        
+```
+//优化拼接的结果，起一个别名，希望查询结果的列名叫result
+    SELECT
+      concat(hero_name, '的胜率是', win_rate) AS result
+    FROM
+      timi_adc
+    WHERE
+      id = 3;//输出的数据是  result
+                            狄仁杰的胜率是0.5082
+```
+
+· `TRIM函数 语法`:                
+```
+## 数据库记录的是用户输入的数据，用户输入时的数据通常不是我们所预期的，有的时候他会包含空格等我们不需要的字符，从而产生脏数据，为了保持数据的格式正确，我们经常使用TRIM函数来清理数据
+    TRIM (str)
+//把需要去除空格的数据放在TRIM()函数的空格里面，比如向timi_adc中插入两条新的数据
+    INSERT INTO  timi_adc
+    VALUES
+      (20,'      鲁班七号','T1      ',0.5111,0.2300,0.0944,now(),now()),
+      (21,'     后羿      ','QT1Q',0.5111,0.2300,0.0944,now(),now());
+      
+//查询id为20的姓名和热度，我们期望去掉数据中的空格
+    SELECT
+      TRIM(hero_name),
+      TRIM(fever)
+    FROM
+      timi_adc
+    WHERE
+      id = 20;
+```
+1. `TRIM语法拓展`:      
+```
+// TRIM()函数可以去掉查询结果中的空格，但不会修改原数据,修改原数据需要配合使用UPDATE/DELETE使用
+
+//TRIM()函数也可以精准的去掉前面或者后面的空格，或者其他的字符，语法如下:
+    TRIM( BOTH|LEADING|TRAILING removed_str FROM str);
+
+//TRIM函数可以加上LEADING来只除去前面的空格，或者加上TRAILING来除去后面的空格，如果都不加，默认是BOTH
+//TRIM函数可以删除指定的字符串内容，如果不加，则默认删除空格
+
+//去掉id为21这条数据中fever尾部的Q,::精准去掉
+    SELECT
+      TRIM(
+        TRAILING 'Q'
+        FROM
+          fever
+      )
+    FROM
+      timi_adc
+    WHERE
+      id = 21;
+```
+2. `REPLACE函数 语法`:      
+```
+//TRIM()函数不能去掉字符串中间的值，如果要修改中间的值，可以用REPLACE()函数:
+    UPDATE table_name 
+    SET colunm_name = 
+    REPLACE(column_name,string_find,string_to_replace) 
+    WHERE conditions;
+//语法很复杂，它可以把找到的某个字符串替换成另一个字符串，用UPDATE语句修改比REPLACE实用性更高
+
+** MYSQL字符串有很多函数，但在实际应用中，我们会采用MyBatis等框架去操作SQL，所以并不需要学会所有的字符串函数。
+```
